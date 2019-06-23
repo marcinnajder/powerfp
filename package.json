@@ -1,0 +1,31 @@
+{
+  "name": "powerfp",
+  "version": "0.0.1",
+  "description": "Functional programming utils",
+  "main": "index.js",
+  "scripts": {
+    "del-dist": "shx rm -rf ./dist",
+    "test": "mocha ./dist/cjs_es6/test -R spec --recursive --timeout 30000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcinnajder/powerfp.git"
+  },
+  "author": "Marcin Najder <marcin.najder@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcinnajder/powerfp/issues"
+  },
+  "homepage": "https://github.com/marcinnajder/powerfp#readme",
+  "sideEffects": false,
+  "dependencies": {},
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.0.10",
+    "mocha": "^6.1.4",
+    "npm-run-all": "^4.1.5",
+    "powerseq": "^1.0.4",
+    "shx": "^0.3.2",
+    "typescript": "^3.5.2"
+  }
+}

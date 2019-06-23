@@ -1,0 +1,15 @@
+- tests
+-- improve pipe tests
+-- do
+-- result
+-- option
+-- functor, monad operation implementations
+-- rename monadic functions tests
+
+
+
+- todo
+-- compose
+-- reverseArgs  
+-- extend monad functions
+-- list https://fsharpforfunandprofit.com/posts/recursive-types-and-folds-3/#linkedlist
