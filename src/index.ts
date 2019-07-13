@@ -1,11 +1,25 @@
 export * from "./types";
-export * from "./monad";
 export * from "./functor";
+export * from "./monad";
+export * from "./applicative";
 export * from "./monadicFunctions";
 export * from "./do";
 export * from "./curry";
 export * from "./pipe";
+export * from "./compose";
 export * from "./monadicFunctions";
-export { Result, ResultS, ok, error, map as resultMap, bind as resultBind, resultMonadOps, resultFunctorOps } from "./result";
-export { Option, none, some, map as optionMap, bind as optionBind, optionMonadOps, optionFunctorOps } from "./option";
+export * from "./jsapi";
+export * from "./result";
+export * from "./result.generated";
+export * from "./resultS";
+export * from "./option";
+export * from "./option.generated";
+export * from "./promise";
+export * from "./promise.generated";
+export * from "./array";
+export * from "./array.generated";
+export * from "./iterable";
+export * from "./iterable.generated";
+export * from "./observable";
+export * from "./observable.generated";
 

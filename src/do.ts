@@ -1,9 +1,9 @@
 import { M, MOps } from "./monad";
 
-export function do_<T extends M>(generator: () => Iterator<M>, ops: MOps): T {
+export function do_<T extends M<unknown>>(ops: MOps, generator: () => Iterator<M<unknown>>): T {
     const iterator = generator();
 
-    const next = (value: any): M => {
+    const next = (value: any): M<unknown> => {
         const iteratorResult = iterator.next(value);
         if (iteratorResult.done) {
             return (iteratorResult.value || ops.return_(undefined));
@@ -15,10 +15,10 @@ export function do_<T extends M>(generator: () => Iterator<M>, ops: MOps): T {
     return next(undefined) as T;
 }
 
-export function do__<T extends M>(generator: () => Iterator<M>, ops: MOps): T {
+export function do__<T extends M<unknown>>(ops: MOps, generator: () => Iterator<M<unknown>>): T {
     function interateForValues(values: any[]) {
         const iterator = generator();
-        let iteratorResult: IteratorResult<M> | undefined;
+        let iteratorResult: IteratorResult<M<unknown>> | undefined;
 
         for (const value of values) {
             iteratorResult = iterator.next(value);
@@ -31,7 +31,7 @@ export function do__<T extends M>(generator: () => Iterator<M>, ops: MOps): T {
     }
 
     function createNext(values: any[]) {
-        return (value: any): M => {
+        return (value: any): M<unknown> => {
             const nextValues = [...values, value];
             const iteratorResult = interateForValues(nextValues);
 

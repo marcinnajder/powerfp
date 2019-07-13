@@ -1,21 +1,18 @@
 import { f } from "./types";
-import { MOps } from "./monad";
-import { FunctorOperations } from "./functor";
 
+export type Option<T> = ({ type: "some", value: T } | { type: "none" })
+    & { map<R>(f: f<T, R>): Option<R> }
+    & { bind<R>(f: f<T, Option<R>>): Option<R> };
+
+// constructors
 const optionOps: Option<any> = {
     bind(f) {
-        return bind_(this, f);
+        return bind(this, f);
     }, map(f) {
-        return map_(this, f);
+        return map(this, f);
     },
     type: "none"
 };
-
-export type Option<T = {}> = ({ type: "some", value: T } | { type: "none" })
-    & { bind<T2>(f: f<T, Option<T2>>): Option<T2> }
-    & { map<T2>(f: f<T, T2>): Option<T2> };
-
-
 export function some<T>(value: T): Option<T> {
     return { ...optionOps, type: "some", value };
 }
@@ -24,40 +21,19 @@ export function none<T>(): Option<T> {
 }
 
 
-function bind_<T1, T2>(m: Option<T1>, f: (value: T1) => Option<T2>): Option<T2> {
-    return m.type === "none" ? none<T2>() : f(m.value);
+function return_<T>(value: T): Option<T> {
+    return some(value);
 }
-function map_<T1, T2>(m: Option<T1>, f: (value: T1) => T2): Option<T2> {
-    return m.type === "none" ? none<T2>() : some(f(m.value));
+function bind<T, R>(m: Option<T>, f: f<T, Option<R>>): Option<R> {
+    return m.type === "none" ? none() : f(m.value);
 }
-
-
-export function map<T1, T2>(f: f<T1, T2>): f<Option<T1>, Option<T2>>;
-export function map<T1, T2>(m: Option<T1>, f: f<T1, T2>): Option<T2>;
-export function map(mf: any, f?: any): any {
-    return f ? map_(mf, f) : (m: any) => map_(m, mf);
+function map<T, R>(m: Option<T>, f: f<T, R>): Option<R> {
+    return m.type === "none" ? none() : some(f(m.value));
 }
-
-export function bind<T1, T2>(f: f<T1, Option<T2>>): f<Option<T1>, Option<T2>>;
-export function bind<T1, T2>(m: Option<T1>, f: f<T1, Option<T2>>): Option<T2>;
-export function bind(mf: any, f?: any): any {
-    return f ? bind_(mf, f) : (m: any) => bind_(m, mf);
+function apply<T, R>(f: Option<f<T, R>>, m: Option<T>): Option<R> {
+    return f.type === "none" ? none() : map(m, f.value);
 }
 
 
-export const optionMonadOps: MOps = {
-    return_<T>(value: T): Option<T> {
-        return some(value);
-    },
-    bind<T1, T2>(m: Option<T1>, f: (value: T1) => Option<T2>): Option<T2> {
-        // console.log(m);
-        return m.bind(f);
-    }
-};
 
-
-export const optionFunctorOps: FunctorOperations = {
-    map<T1, T2>(m: Option<T1>, f: (value: T1) => T2): Option<T2> {
-        return map(m, f);
-    }
-};
+export default { return_, map, bind, apply };
