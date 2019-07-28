@@ -7,3 +7,7 @@ export function callBind(bind: any, mf: any, f?: any) {
 export function callApply(apply: any, f: any, m?: any) {
     return m ? apply(f, m) : (m: any) => apply(f, m);
 }
+
+export function extendObjWithFunctionResult<T extends Function>(extendObj: any, fun: T): T {
+    return ((...args: any[]) => ({ ...extendObj, ...fun(...args) })) as any as T;
+}

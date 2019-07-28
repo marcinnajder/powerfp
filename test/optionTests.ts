@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { optionMap, optionReturn, optionBind, compose, optionApply, none } from "../src/index";
+import { optionMap, optionReturn, optionBind, compose, optionApply, none, Option } from "../src/index";
 import { toString_, inc } from "./testsUtils";
 
 it('option', function () {
@@ -9,7 +9,7 @@ it('option', function () {
   const inc_InOption = optionReturn(inc);
 
   const s = optionReturn(1);
-  const n = none<number>();
+  const n = none;
 
   // success
   assert.deepEqual(optionMap(s, toString_), optionReturn("1"));
@@ -31,5 +31,5 @@ it('option', function () {
   assert.deepEqual(optionMap(n, toString_), n);
   assert.deepEqual(optionBind(n, toString_Option), n);
   assert.deepEqual(optionApply(toString_InOption, n), n);
-  assert.deepEqual(optionApply(none() as typeof toString_InOption, s), none());
+  assert.deepEqual(optionApply(none as typeof toString_InOption, s), none);
 });

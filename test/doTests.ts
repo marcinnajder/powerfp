@@ -13,12 +13,12 @@ it('do', async function () {
 
     // success
     const result2 = optionDo<number>(function* () {
-        const a: string = yield none();
+        const a: string = yield none;
         const b: number = yield some(6);
         return some(parseInt(a) + b);
     })
 
-    assert.deepEqual(result2, none());
+    assert.deepEqual(result2, none);
 });
 
 

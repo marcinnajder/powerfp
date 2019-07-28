@@ -38,3 +38,14 @@ export type ocf3<T1, T2, R> = f<T1, f<T2, R>>;
 export type ocf4<T1, T2, T3, R> = f<T1, ocf3<T2, T3, R>>;
 export type ocf5<T1, T2, T3, T4, R> = f<T1, ocf4<T2, T3, T4, R>>;
 
+
+// union types
+export type TypedObj<T = string> = { type: T };
+export type UnionChoice<T extends TypedObj<string>, TT extends T["type"]> = Extract<T, { type: TT }>;
+
+export type ExhaustiveMatchTypedObj<T extends TypedObj<string>, R> = {
+    [P in T["type"]]: (value: Extract<T, { type: P }>) => R;
+}
+
+export type MatchTypedObj<T extends TypedObj<string>, R> = ExhaustiveMatchTypedObj<T, R>
+    | (Partial<ExhaustiveMatchTypedObj<T, R>> & { _: (union: T) => R });

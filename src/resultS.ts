@@ -1,5 +1,5 @@
 import { f3, f4, f5 } from "./types";
-import { resultMapM, resultFilterM, resultReduceM, resultLiftA2, resultLiftA3, resultLiftA4, resultMonadOps } from "./result.generated";
+import { resultMapM, resultFilterM, resultReduceM, resultLiftA2, resultLiftA3, resultLiftA4, resultMonadOps } from "./fma.generated";
 import { Result } from "./result";
 import { do_ } from "./do";
 

@@ -1,21 +1,18 @@
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html
 
 import * as assert from "assert";
-import { curry, pipe, f, f3 } from "../src/index";
+import { curry, curryOnly } from "../src/index";
+import { add3 } from "./testsUtils";
 
-function add(a: number, b: number, c: number) {
-    return a + b + c;
-}
 
 function obj(x: string, y: boolean, z: number) {
     return { x, y, z };
 }
 
-
 it('curry', function () {
-    const addC = curry(add);
+    const addC = curry(add3);
 
-    const result1 = add(1, 2, 3);
+    const result1 = add3(1, 2, 3);
     assert.equal(addC(1, 2, 3), result1);
     assert.equal(addC(1, 2)(3), result1);
     assert.equal(addC(1)(2)(3), result1);
@@ -29,6 +26,20 @@ it('curry', function () {
     assert.deepEqual(objC("")(true)(2), result2);
     assert.deepEqual(objC()("")(true)(2), result2);
     assert.deepEqual(objC("")(true, 2), result2);
+});
+
+it('curryOnly', function () {
+    const addC = curryOnly(add3);
+
+    const result1 = add3(1, 2, 3);
+    assert.equal(addC(1)(2)(3), result1);
+    assert.equal(typeof addC(1), "function");
+    assert.equal(typeof addC(1)(2), "function");
+    assert.equal(typeof addC(1)(2)(3), "number");
+
+    const objC = curryOnly(obj);
+    const result2 = obj("", true, 2);
+    assert.deepEqual(objC("")(true)(2), result2);
 });
 
 

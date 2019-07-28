@@ -1,32 +1,37 @@
-import { readFileSync, writeFileSync } from "fs";
-import * as path from "path";
-
+import { generateFile } from "./generationUtils";
 
 //generateInsideFiles("./src/option.ts");
-generateFile("./src/option.ts", generateFpCode, { name: "option", typeName: "Option", fileName: "option", importedTypeName: "Option" } as Options);
-generateFile("./src/result.ts", generateFpCode, { name: "result", typeName: "Result", fileName: "result", importedTypeName: "Result", genArgs: ", E" } as Options);
-generateFile("./src/promise.ts", generateFpCode, { name: "promise", typeName: "Promise", fileName: "promise" } as Options);
-generateFile("./src/array.ts", generateFpCode, { name: "array", typeName: "Array", fileName: "array", doPostfix: "_" } as Options);
-generateFile("./src/iterable.ts", generateFpCode, { name: "iterable", typeName: "Iterable", fileName: "iterable", doPostfix: "_" } as Options);
-generateFile("./src/observable.ts", generateFpCode, { name: "observable", typeName: "Observable", fileName: "observable", doPostfix: "_", importedTypeName: "Observable" } as Options);
 
-export function generateFile(filePath: string, generatorFunction: Function, generatorArgs: any) {
-    try {
-        const content = generatorFunction(generatorArgs);
-        const generatedFilePath = path.join(path.dirname(filePath), `${path.parse(filePath).name}.generated.ts`);
-        writeFileSync(generatedFilePath, content);
-        console.log(`File '${generatedFilePath}' generated ... `);
-    } catch (err) {
-        console.error(`Error while processing '${filePath}' file: `, err);
-        throw err;
-    }
-}
+// generateFile("./src/option.generated.ts", generateFpCode, { name: "option", typeName: "Option", fileName: "option", importedTypeName: "Option" } as Options);
+// generateFile("./src/result.generated.ts", generateFpCode, { name: "result", typeName: "Result", fileName: "result", importedTypeName: "Result", genArgs: ", E" } as Options);
+// generateFile("./src/promise.generated.ts", generateFpCode, { name: "promise", typeName: "Promise", fileName: "promise" } as Options);
+// generateFile("./src/array.generated.ts", generateFpCode, { name: "array", typeName: "Array", fileName: "array", doPostfix: "_" } as Options);
+// generateFile("./src/iterable.generated.ts", generateFpCode, { name: "iterable", typeName: "Iterable", fileName: "iterable", doPostfix: "_" } as Options);
+// generateFile("./src/observable.generated.ts", generateFpCode, { name: "observable", typeName: "Observable", fileName: "observable", doPostfix: "_", importedTypeName: "Observable" } as Options);
+// generateFile("./src/io.generated.ts", generateFpCode, { name: "io", typeName: "IO", fileName: "io", importedTypeName: "IO" } as Options);
+
+
+
+generateFile("./src/fma.generated.ts", generateFpCode, [
+    { name: "option", typeName: "Option", fileName: "option", importedTypeName: "Option", generateTypesImport: true },
+    , { name: "result", typeName: "Result", fileName: "result", importedTypeName: "Result", genArgs: ", E" },
+    , { name: "promise", typeName: "Promise", fileName: "promise" },
+    , { name: "array", typeName: "Array", fileName: "array", doPostfix: "_" },
+    , { name: "iterable", typeName: "Iterable", fileName: "iterable", doPostfix: "_" },
+    , { name: "observable", typeName: "Observable", fileName: "observable", doPostfix: "_", importedTypeName: "Observable" },
+    , { name: "io", typeName: "IO", fileName: "io", importedTypeName: "IO" }
+] as Options[]);
+
+
+
+
 
 export interface Options {
     name: string;
     typeName: string;
     fileName: string;
     importedTypeName?: string;
+    generateTypesImport?: boolean;
     genArgs?: string;
     doPostfix?: string;
 }
@@ -36,41 +41,48 @@ export function generateFpCode(options: Options) {
     options.genArgs = options.genArgs || "";
     options.doPostfix = options.doPostfix || "";
 
-    return `// ** this code was generated automatically **
-import ${options.name}, { ${options.importedTypeName}} from "./${options.fileName}";
-const { return_, map, bind, apply} = ${options.name};
+    let content = `// ** this code was generated automatically **`;
+
+    if (options.generateTypesImport) {
+        content += `
 import { f, f3, f4, f5 } from "./types";
 import { MOps } from "./monad";
 import { FOps, F } from "./functor";
 import { AOps, liftA2, liftA3, liftA4 } from "./applicative";
-import { mapM, filterM, reduceM } from "./monadicFunctions";
+import { mapM, filterM, reduceM, liftM2, liftM3, liftM4} from "./monadicFunctions";
 import { callApply, callMap, callBind } from "./utils";
-import { do_${options.doPostfix} } from "./do";
+import { do_, do__ } from "./do";
+`;
+    }
+
+    content += `
+import ${options.name}, { ${options.importedTypeName}} from "./${options.fileName}";
+const { return_: ${options.name}__return_, map: ${options.name}__map, bind: ${options.name}__bind, apply:${options.name}__apply } = ${options.name};
 
 // functor, monad, applicative functor
-export const ${options.name}FunctorOps: FOps = { map };
-export const ${options.name}MonadOps: MOps = { return_, bind };
-export const ${options.name}ApplicativeOps: AOps = { map, return_, apply };
+export const ${options.name}FunctorOps: FOps = { map: ${options.name}__map };
+export const ${options.name}MonadOps: MOps = { return_: ${options.name}__return_, bind: ${options.name}__bind };
+export const ${options.name}ApplicativeOps: AOps = { map: ${options.name}__map, return_: ${options.name}__return_, apply: ${options.name}__apply };
 
 
 // return, map, bind, apply
 export function ${options.name}Return<T${options.genArgs}>(value: T): ${options.typeName}<T${options.genArgs}> {
-    return return_(value);
+    return ${options.name}__return_(value);
 }
 export function ${options.name}Map<T, R${options.genArgs}>(f: f<T, R>): f<${options.typeName}<T${options.genArgs}>, ${options.typeName}<R${options.genArgs}>>;
 export function ${options.name}Map<T, R${options.genArgs}>(m: ${options.typeName}<T${options.genArgs}>, f: f<T, R>): ${options.typeName}<R${options.genArgs}>;
 export function ${options.name}Map(mf: any, f?: any): any {
-    return callMap(map, mf, f);
+    return callMap(${options.name}__map, mf, f);
 }
 export function ${options.name}Bind<T, R${options.genArgs}>(f: f<T, ${options.typeName}<R${options.genArgs}>>): f<${options.typeName}<T${options.genArgs}>, ${options.typeName}<R${options.genArgs}>>;
 export function ${options.name}Bind<T, R${options.genArgs}>(m: ${options.typeName}<T${options.genArgs}>, f: f<T, ${options.typeName}<R${options.genArgs}>>): ${options.typeName}<R${options.genArgs}>;
 export function ${options.name}Bind(mf: any, f?: any): any {
-    return callBind(bind, mf, f);
+    return callBind(${options.name}__bind, mf, f);
 }
 export function ${options.name}Apply<T, R${options.genArgs}>(f: ${options.typeName}<f<T, R>${options.genArgs}>, m: ${options.typeName}<T${options.genArgs}>): ${options.typeName}<R${options.genArgs}>;
 export function ${options.name}Apply<T, R${options.genArgs}>(f: ${options.typeName}<f<T, R>${options.genArgs}>): f<${options.typeName}<T${options.genArgs}>, ${options.typeName}<R${options.genArgs}>>;
 export function ${options.name}Apply(f: any, m?: any): any {
-    return callApply(apply, f, m);
+    return callApply(${options.name}__apply, f, m);
 }
 
 // monadic functions
@@ -82,6 +94,16 @@ export function ${options.name}FilterM<T${options.genArgs}>(items: T[], f: (item
 }
 export function ${options.name}ReduceM<T, A${options.genArgs}>(items: T[], f: (prev: A, item: T) => ${options.typeName}<A${options.genArgs}>, seed: A): ${options.typeName}<A${options.genArgs}> {
     return reduceM(${options.name}MonadOps, items, f, seed) as ${options.typeName}<A${options.genArgs}>;
+}
+
+export function ${options.name}LiftM2<T1, T2, R${options.genArgs}>(f: f3<T1, T2, R>, m1: ${options.typeName}<T1${options.genArgs}>, m2: ${options.typeName}<T2${options.genArgs}>): ${options.typeName}<R${options.genArgs}> {
+    return liftM2(${options.name}MonadOps, f, m1, m2) as ${options.typeName}<R${options.genArgs}>;
+}
+export function ${options.name}LiftM3<T1, T2, T3, R${options.genArgs}>(f: f4<T1, T2, T3, R>, m1: ${options.typeName}<T1${options.genArgs}>, m2: ${options.typeName}<T2${options.genArgs}>, m3: ${options.typeName}<T3${options.genArgs}>): ${options.typeName}<R${options.genArgs}> {
+    return liftM3(${options.name}MonadOps, f, m1, m2, m3) as ${options.typeName}<R${options.genArgs}>;
+}
+export function ${options.name}LiftM4<T1, T2, T3, T4, R${options.genArgs}>(f: f5<T1, T2, T3, T4, R>, m1: ${options.typeName}<T1${options.genArgs}>, m2: ${options.typeName}<T2${options.genArgs}>, m3: ${options.typeName}<T3${options.genArgs}>, m4: ${options.typeName}<T4${options.genArgs}>): ${options.typeName}<R${options.genArgs}> {
+    return liftM4(${options.name}MonadOps, f, m1, m2, m3, m4) as ${options.typeName}<R${options.genArgs}>;
 }
 
 // applicative functions
@@ -99,6 +121,8 @@ export function ${options.name}Do<T${options.genArgs}>(generator: () => Iterator
     return do_${options.doPostfix}(${options.name}MonadOps, generator);
 }
 `;
+
+    return content;
 }
 
 

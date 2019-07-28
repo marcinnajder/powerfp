@@ -1,5 +1,8 @@
 import { f } from "./types";
+import { ok as okGenerated, error as errorGenerated, Result_ok, Result_error } from "./adt.generated";
+import { extendObjWithFunctionResult } from "./utils";
 
+export { Result_ok, Result_error };
 // https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/results
 export type Result<T, E> = ({ type: "ok", value: T } | { type: "error", error: E })
     & { map<R>(f: f<T, R>): Result<R, E> }
@@ -15,12 +18,16 @@ const resultOps: Pick<Result<any, any>, "bind" | "map"> = {
         return map(this as any, f);
     }
 };
-export function ok<T, E>(value: T): Result<T, E> {
-    return { ...resultOps, type: "ok", value };
-}
-export function error<T, E>(err: E): Result<T, E> {
-    return { ...resultOps, type: "error", error: err };
-}
+// export function ok<T, E>(value: T): Result<T, E> {
+//     return { ...resultOps, type: "ok", value };
+// }
+// export function error<T, E>(err: E): Result<T, E> {
+//     return { ...resultOps, type: "error", error: err };
+// }
+
+export const ok = extendObjWithFunctionResult(resultOps, okGenerated);
+export const error = extendObjWithFunctionResult(resultOps, errorGenerated);
+
 
 
 function return_<T, E>(value: T): Result<T, E> {

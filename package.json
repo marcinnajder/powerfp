@@ -6,7 +6,8 @@
   "scripts": {
     "del-dist": "shx rm -rf ./dist",
     "test": "mocha ./dist/cjs_es6/test -R spec --recursive --timeout 30000",
-    "generate": "node ./dist/cjs_es6/src/generators/fpCodeGenerator.js"
+    "generate-fma": "node ./dist/cjs_es6/src/generators/fmaCodeGenerator.js",
+    "generate-adt": "node ./dist/cjs_es6/src/generators/adtCodeGenerator.js"
   },
   "repository": {
     "type": "git",
