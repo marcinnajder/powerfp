@@ -1,62 +1,9 @@
 import { generateFile } from "./generationUtils";
 import { EOL } from "os";
 
-generateFile("./src/adt.generated.ts", generateAdtCode, [
-    {
-        generateTypesImport: true,
-        typeName: "Option", genArgs: ["T"], filePathName: "./option", unionTagName: "type",
-        unions: {
-            none: null,
-            some: { fields: { value: "T" }, genArgsDeps: ["T"] },
-        }
-    },
-    {
-        typeName: "Result", genArgs: ["T", "E"], filePathName: "./result", unionTagName: "type",
-        unions: {
-            ok: { fields: { value: "T" }, genArgsDeps: ["T"] },
-            error: { fields: { error: "E" }, genArgsDeps: ["E"] },
-        }
-    },
-    {
-        typeName: "List", genArgs: ["T"], filePathName: "./list", unionTagName: "type",
-        unions: {
-            cons: { fields: { head: "T", tail: "List<T>" }, genArgsDeps: ["T"] },
-            empty: null,
-        }
-    },
-    {
-        typeName: "Tree", genArgs: ["T"], filePathName: "./tree", unionTagName: "type",
-        unions: {
-            node: { fields: { value: "T", left: "Tree<T>", right: "Tree<T>" }, genArgsDeps: ["T"] },
-            emptynode: null,
-        }
-    },
-    // {
-    //     typeName: "MalType", filePathName: "./mal", unionTagName: "type",
-    //     unions: {
-    //         nil: null,
-    //         true_: null,
-    //         false_: null,
-
-    //         number_: { fields: { value: "number" } },
-    //         symbol: { fields: { name: "string" } },
-    //         keyword: { fields: { name: "string" } },
-
-    //         quote: { fields: { mal: "MalType" } },
-    //         quasiquote: { fields: { mal: "MalType" } },
-    //         unquote: { fields: { mal: "MalType" } },
-    //         splice_unquote: { fields: { mal: "MalType" } },
-
-    //         list: { fields: { items: "MalType[]", listType: "ListType" } },
-    //         fn: { fields: { fn: "MalFuncType" } }
-    //     },
-    //     additionalImports: [`import { ListType, MalFuncType } from "./mal";`]
-    // },
-] as Options[]);
-
 
 export interface Options {
-    generateTypesImport?: boolean;
+    typeImportsPath?: string;
     typeName: string;
     genArgs?: string[]
     filePathName: string;
@@ -66,11 +13,11 @@ export interface Options {
     // importedTypeName?: string;
 }
 
-interface Dictionary<T> {
+export interface Dictionary<T> {
     [key: string]: T;
 }
 
-type Union = {
+export type Union = {
     fields: Dictionary<string>;
     genArgsDeps?: string[];
 };
@@ -80,6 +27,7 @@ export function generateAdtCode(options: Options) {
     options.genArgs = options.genArgs || [];
     options.unions = options.unions || [];
     options.additionalImports = options.additionalImports || [];
+
     for (const [unionName, union] of Object.entries(options.unions)) {
         if (union === null) {
             options.unions[unionName] = { fields: {}, genArgsDeps: [] };
@@ -101,7 +49,7 @@ export function generateAdtCode(options: Options) {
     }
 
     let content = `// ** this code was generated automatically **
-${options.generateTypesImport ? `import { UnionChoice } from "./types";` : ""}
+${options.typeImportsPath ? `import { UnionChoice } from "${options.typeImportsPath}";` : ""}
 import { ${options.typeName} } from "${options.filePathName}";
 ${options.additionalImports.join(EOL)}
 

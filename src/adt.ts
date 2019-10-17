@@ -1,11 +1,11 @@
-import { UnionChoice, TypedObj, MatchTypedObj } from "./types";
+import { UnionChoice, TypedObj, MatchTypedObj, f } from "./types";
 
 export function isUnion<T extends TypedObj, Type extends T["type"]>(x: T, unionType: Type): x is UnionChoice<T, Type> {
     return x.type === unionType;
 }
 
 export function matchUnion<T extends TypedObj, R>(unionType: T, obj: MatchTypedObj<T, R>) {
-    let matchingFunction = obj[unionType.type];
+    let matchingFunction: f<T, R> = obj[unionType.type];
     if (!matchingFunction) {
         matchingFunction = obj["_"];
         if (!matchingFunction) {

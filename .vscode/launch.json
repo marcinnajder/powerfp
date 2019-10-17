@@ -10,5 +10,11 @@
             "name": "fpCodeGenerator.js",
             "program": "${workspaceFolder}/dist/cjs_es6/src/generators/fpCodeGenerator.js"
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "parser.js",
+            "program": "${workspaceFolder}/dist/cjs_es6/src/generators/parser.js"
+        },
     ]
 }

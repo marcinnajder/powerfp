@@ -3,10 +3,10 @@ import { UnionChoice } from "./types";
 import { Option } from "./option";
 
 
-export type Option_none = UnionChoice<Option<never>, "none">;
-export const none = { type: "none" } as Option_none;
 export type Option_some<T> = UnionChoice<Option<T>, "some">;
 export const some = <T>(value: T) => ({ type: "some", value }) as Option_some<T>;
+export type Option_none = UnionChoice<Option<never>, "none">;
+export const none = { type: "none" } as Option_none;
 
 // ** this code was generated automatically **
 
