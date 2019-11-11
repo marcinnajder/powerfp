@@ -4,9 +4,21 @@
   "description": "Functional programming utils",
   "main": "index.js",
   "scripts": {
+    "del": "npm-run-all del-dist del-npmpackage",
+    "del-node_modules": "shx rm -rf ./node_modules",
     "del-dist": "shx rm -rf ./dist",
+    "del-npmpackage": "shx rm -rf ./npmpackage",
+    "gen-package-json": "mkdirp ./npmpackage/bundles && node tools/genPackageJson.js",
     "test": "mocha ./dist/cjs_es6/test -R spec --recursive --timeout 30000",
-    "generate": "node ./dist/cjs_es6/src/generators/runGenerators.js",
+    "rebuild": "npm-run-all del tsc generate tsc",
+    "tsc": "tsc",
+    "tsc-esm_es5": "tsc -p ./tsconfig.esm_es5.json",
+    "copy-cjs_es6-src-npmpackage": "mkdirp ./npmpackage && shx cp -r ./dist/cjs_es6/src/* ./npmpackage",
+    "copy-esm_es5-src-npmpackage": "mkdirp ./npmpackage/esm_es5 && shx cp -r ./dist/esm_es5/src/* ./npmpackage/esm_es5",
+    "bundles": "mkdirp ./npmpackage/bundles && node ./tools/make-umd-bundle.js",
+    "inject-ts-helpers": "node ./tools/inject-ts-helpers.js",
+    "build-npmpackage": "npm-run-all rebuild tsc-esm_es5 copy-cjs_es6-src-npmpackage copy-esm_es5-src-npmpackage  gen-package-json bundles inject-ts-helpers",
+    "generate": "node ./dist/cjs_es6/tools/runGenerators.js",
     "parser": "node ./dist/cjs_es6/src/generators/parser.js"
   },
   "repository": {
@@ -20,10 +32,7 @@
   },
   "homepage": "https://github.com/marcinnajder/powerfp#readme",
   "sideEffects": false,
-  "dependencies": {
-    "@types/ramda": "^0.26.15",
-    "rambda": "^2.11.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.0.10",
@@ -32,6 +41,8 @@
     "powerseq": "^1.0.4",
     "rxjs": "^6.5.2",
     "shx": "^0.3.2",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "tslib": "^1.10.0",
+    "rollup": "^0.37.0"
   }
 }

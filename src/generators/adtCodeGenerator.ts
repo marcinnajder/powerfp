@@ -1,6 +1,5 @@
-import { generateFile } from "./generationUtils";
+/** code generator for Algebraic Data Types  */
 import { EOL } from "os";
-
 
 export interface Options {
     typeImportsPath?: string;
@@ -75,19 +74,3 @@ ${options.additionalImports.join(EOL)}
 function wrapWithGen(text: string) {
     return `<${text}>`;
 }
-
-
-// // pytania
-// // - czy funkcje czy stale ?
-// // - czy zwracach Optoion czy konkretny typ ?
-
-// type Option_none = UnionChoice<Option<never>, "none">;
-// type Option_some<T> = UnionChoice<Option<T>, "some">;
-
-// const none = { type: "none" } as Option<never>;
-// const some = <T>(value: T) => ({ type: "none" }) as Option<T>;
-
-// // const none = { type: "none" } as ExtractedUnion<Option<never>, "none">;
-// // const some = <T>(value: T) => ({ type: "some", value }) as ExtractedUnion<Option<T>, "some">;;
-
-

@@ -15,7 +15,7 @@ export * from "./option";
 export * from "./promise";
 export * from "./array";
 export * from "./iterable";
-export * from "./observable";
+// export * from "./observable";
 export * from "./io";
 export * from "./memoize";
 export * from "./list";

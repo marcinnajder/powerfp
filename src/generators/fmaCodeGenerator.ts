@@ -1,6 +1,4 @@
-import { generateFile } from "./generationUtils";
-
-
+/** code generator for Functors and Monads  */
 
 export interface Options {
     name: string;

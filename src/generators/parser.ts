@@ -2,7 +2,8 @@
 import * as ts from "typescript";
 import * as fs from "fs";
 import { Options, Union, Dictionary } from "./adtCodeGenerator";
-import { Option, none, some, f } from "../index";
+import { Option, none, some } from "../option";
+import { f } from "../types";
 
 export type Input = Array<Pick<Options, "typeName" | "unionTagName">>;
 export type Unions = Pick<Options, "unions">["unions"];
@@ -172,7 +173,7 @@ function partition<T>(items: Iterable<T>, f: f<T, boolean>) {
 }
 
 
-// ************ alternatywna definicja mapowania AST dla TS
+// ************ alternative way of defining AST mapping 
 
 // type TsNodes__<K extends ts.SyntaxKind.IntersectionType> =
 //     { type: K, node: TsMapping[K] }
