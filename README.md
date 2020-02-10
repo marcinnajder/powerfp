@@ -13,7 +13,10 @@ npm install powerfp
 - `do` Haskell notation using ES6 generators 
 - code generators for algebraic data types and functors, monads and applicative functors
 - utility functions like `memoize` and functions extracted from types like string, Regex (useful with function composition) 
-
+- `SumType` type inferring ADT type from the constructor functions
+- `matchValue` predicate function matching single value against specified pattern (primitive values, object, array)
+- `match` function providing "pattern matching" functionality
+- `toOption` converting value of type `T|null|undefined` into `Option<T>`
 
 ### Sample code
 
