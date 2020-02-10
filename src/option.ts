@@ -43,6 +43,8 @@ function apply<T, R>(f: Option<f<T, R>>, m: Option<T>): Option<R> {
     return f.type === "none" ? none : map(m, f.value);
 }
 
-
+export function toOption<T>(value: T | null | undefined): Option<T> {
+    return typeof value === "undefined" || value === null ? none : some(value);
+}
 
 export default { return_, map, bind, apply };

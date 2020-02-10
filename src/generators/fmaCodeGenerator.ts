@@ -91,7 +91,7 @@ export function ${options.name}LiftA4<T1, T2, T3, T4, R${options.genArgs}>(f: f5
     return liftA4(${options.name}ApplicativeOps, f, m1, m2, m3, m4) as ${options.typeName}<R${options.genArgs}>;
 }
 
-export function ${options.name}Do<T${options.genArgs}>(generator: () => Iterator<${options.typeName}<T${options.genArgs}>>): ${options.typeName}<T${options.genArgs}> {
+export function ${options.name}Do<T${options.genArgs}>(generator: any): ${options.typeName}<T${options.genArgs}> {
     return do_${options.doPostfix}(${options.name}MonadOps, generator);
 }
 `;

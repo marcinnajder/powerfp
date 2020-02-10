@@ -43,9 +43,16 @@ export type ocf5<T1, T2, T3, T4, R> = f<T1, ocf4<T2, T3, T4, R>>;
 export type TypedObj<T = string> = { type: T };
 export type UnionChoice<T extends TypedObj<string>, TT extends T["type"]> = Extract<T, { type: TT }>;
 
+export type ValueOrFunc<T, R> =
+    | R
+    | ((value: T) => R);
+
 export type ExhaustiveMatchTypedObj<T extends TypedObj<string>, R> = {
-    [P in T["type"]]: (value: Extract<T, { type: P }>) => R;
+    [P in T["type"]]: ValueOrFunc<Extract<T, { type: P }>, R>;
 }
 
-export type MatchTypedObj<T extends TypedObj<string>, R> = ExhaustiveMatchTypedObj<T, R>
-    | (Partial<ExhaustiveMatchTypedObj<T, R>> & { _: (union: T) => R });
+export type MatchTypedObj<T extends TypedObj<string>, R> =
+    | ExhaustiveMatchTypedObj<T, R>
+    | (Partial<ExhaustiveMatchTypedObj<T, R>> & { _: R | ((union: T) => R) });
+
+export type SumType<T> = T extends (...args: any) => any ? ReturnType<T> : T;

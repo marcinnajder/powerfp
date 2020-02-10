@@ -22,4 +22,6 @@ export * from "./list";
 export * from "./tree";
 export * from "./adt";
 export * from "./fma.generated";
+export * from "./match";
+export * from "./matchValue";
 

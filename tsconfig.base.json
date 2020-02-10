@@ -16,6 +16,8 @@
     "include": [
         "src/**/*.ts",
         "test/**/*.ts",
-        "tools/**/*.ts"
+        "tools/**/*.ts",
+        "samples/**/*.ts",
+        "samples/**/*.js"
     ]
 }

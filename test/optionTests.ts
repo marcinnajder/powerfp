@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { optionMap, optionReturn, optionBind, compose, optionApply, none, Option } from "../src/index";
+import { optionMap, optionReturn, optionBind, compose, optionApply, none, Option, toOption, some } from "../src/index";
 import { toString_, inc } from "./testsUtils";
 
 it('option', function () {
@@ -32,4 +32,11 @@ it('option', function () {
   assert.deepEqual(optionBind(n, toString_Option), n);
   assert.deepEqual(optionApply(toString_InOption, n), n);
   assert.deepEqual(optionApply(none as typeof toString_InOption, s), none);
+
+  // toOption
+  assert.deepEqual(toOption(null), none);
+  assert.deepEqual(toOption(undefined), none);
+  assert.deepEqual(toOption(0), some(0));
+  assert.deepEqual(toOption(""), some(""));
+  assert.deepEqual(toOption([1, 2, 3]), some([1, 2, 3]));
 });

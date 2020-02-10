@@ -3,7 +3,7 @@ import { some, optionDo, none } from "../src/index";
 
 it('do', async function () {
     // success
-    const result1 = optionDo<number>(function* (): IterableIterator<any> {
+    const result1 = optionDo<number>(function* () {
         const a: string = yield some(1).map(x => x.toString());
         const b: number = yield some(6);
         return some(parseInt(a) + b);
@@ -20,5 +20,4 @@ it('do', async function () {
 
     assert.deepEqual(result2, none);
 });
-
 

@@ -16,7 +16,7 @@ import { Result } from "./result";
 export type Result_ok<T> = UnionChoice<Result<T, never>, "ok">;
 export const ok = <T>(value: T) => ({ type: "ok", value }) as Result_ok<T>;
 export type Result_error<E> = UnionChoice<Result<never, E>, "error">;
-export const error = <E>(error: E) => ({ type: "error", error }) as Result_error<E>;
+export const error = <E>(error: E) => ({ type: "error", err: error }) as Result_error<E>;
 
 // ** this code was generated automatically **
 

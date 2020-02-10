@@ -1,6 +1,6 @@
 {
   "name": "powerfp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Functional programming utils",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,8 @@
     "inject-ts-helpers": "node ./tools/inject-ts-helpers.js",
     "build-npmpackage": "npm-run-all rebuild tsc-esm_es5 copy-cjs_es6-src-npmpackage copy-esm_es5-src-npmpackage  gen-package-json bundles inject-ts-helpers",
     "generate": "node ./dist/cjs_es6/tools/runGenerators.js",
-    "parser": "node ./dist/cjs_es6/src/generators/parser.js"
+    "parser": "node ./dist/cjs_es6/src/generators/parser.js",
+    "samples": "node ./dist/cjs_es6/samples/patternMatching.js"
   },
   "repository": {
     "type": "git",
@@ -41,7 +42,7 @@
     "powerseq": "^1.0.4",
     "rxjs": "^6.5.2",
     "shx": "^0.3.2",
-    "typescript": "^3.5.2",
+    "typescript": "^3.6.3",
     "tslib": "^1.10.0",
     "rollup": "^0.37.0"
   }

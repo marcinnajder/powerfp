@@ -68,7 +68,7 @@ export function optionLiftA4<T1, T2, T3, T4, R>(f: f5<T1, T2, T3, T4, R>, m1: Op
     return liftA4(optionApplicativeOps, f, m1, m2, m3, m4) as Option<R>;
 }
 
-export function optionDo<T>(generator: () => Iterator<Option<T>>): Option<T> {
+export function optionDo<T>(generator: any): Option<T> {
     return do_(optionMonadOps, generator);
 }
 
@@ -135,7 +135,7 @@ export function resultLiftA4<T1, T2, T3, T4, R, E>(f: f5<T1, T2, T3, T4, R>, m1:
     return liftA4(resultApplicativeOps, f, m1, m2, m3, m4) as Result<R, E>;
 }
 
-export function resultDo<T, E>(generator: () => Iterator<Result<T, E>>): Result<T, E> {
+export function resultDo<T, E>(generator: any): Result<T, E> {
     return do_(resultMonadOps, generator);
 }
 
@@ -202,7 +202,7 @@ export function promiseLiftA4<T1, T2, T3, T4, R>(f: f5<T1, T2, T3, T4, R>, m1: P
     return liftA4(promiseApplicativeOps, f, m1, m2, m3, m4) as Promise<R>;
 }
 
-export function promiseDo<T>(generator: () => Iterator<Promise<T>>): Promise<T> {
+export function promiseDo<T>(generator: any): Promise<T> {
     return do_(promiseMonadOps, generator);
 }
 
@@ -269,7 +269,7 @@ export function arrayLiftA4<T1, T2, T3, T4, R>(f: f5<T1, T2, T3, T4, R>, m1: Arr
     return liftA4(arrayApplicativeOps, f, m1, m2, m3, m4) as Array<R>;
 }
 
-export function arrayDo<T>(generator: () => Iterator<Array<T>>): Array<T> {
+export function arrayDo<T>(generator: any): Array<T> {
     return do__(arrayMonadOps, generator);
 }
 
@@ -336,7 +336,7 @@ export function iterableLiftA4<T1, T2, T3, T4, R>(f: f5<T1, T2, T3, T4, R>, m1: 
     return liftA4(iterableApplicativeOps, f, m1, m2, m3, m4) as Iterable<R>;
 }
 
-export function iterableDo<T>(generator: () => Iterator<Iterable<T>>): Iterable<T> {
+export function iterableDo<T>(generator: any): Iterable<T> {
     return do__(iterableMonadOps, generator);
 }
 
@@ -403,6 +403,6 @@ export function ioLiftA4<T1, T2, T3, T4, R>(f: f5<T1, T2, T3, T4, R>, m1: IO<T1>
     return liftA4(ioApplicativeOps, f, m1, m2, m3, m4) as IO<R>;
 }
 
-export function ioDo<T>(generator: () => Iterator<IO<T>>): IO<T> {
+export function ioDo<T>(generator: any): IO<T> {
     return do_(ioMonadOps, generator);
 }
