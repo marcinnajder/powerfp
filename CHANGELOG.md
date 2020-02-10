@@ -1,4 +1,9 @@
 
+<a name="0.0.3"></a>
+# [0.0.3](https://github.com/marcinnajder/powerfp/releases/tag/0.0.3) (2020-02-10)
+
+* TS source code instead of JS has been published to npm by mistake 
+
 <a name="0.0.2"></a>
 # [0.0.2](https://github.com/marcinnajder/powerfp/releases/tag/0.0.2) (2020-02-10)
 
